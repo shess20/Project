@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns3:systemMetadata xmlns:ns2="http://ns.dataone.org/service/types/v1" xmlns:ns3="http://ns.dataone.org/service/types/v2.0">
+    <serialVersion>0</serialVersion>
+    <identifier>doi:10.5063/F1W66J7M</identifier>
+    <formatId>https://eml.ecoinformatics.org/eml-2.2.0</formatId>
+    <size>5053</size>
+    <checksum algorithm="MD5">76b11ca5582e14edd3547663b4afebda</checksum>
+    <submitter>http://orcid.org/0000-0001-8114-3609</submitter>
+    <rightsHolder>http://orcid.org/0000-0001-8114-3609</rightsHolder>
+    <accessPolicy>
+        <allow>
+            <subject>CN=knb-data-admins,DC=dataone,DC=org</subject>
+            <permission>read</permission>
+            <permission>write</permission>
+            <permission>changePermission</permission>
+        </allow>
+        <allow>
+            <subject>public</subject>
+            <permission>read</permission>
+        </allow>
+    </accessPolicy>
+    <replicationPolicy replicationAllowed="false"/>
+    <obsoletes>urn:uuid:7c335b9f-b912-4ae8-bb29-865b95282dc1</obsoletes>
+    <archived>false</archived>
+    <dateUploaded>2022-09-13T23:12:58.196+00:00</dateUploaded>
+    <dateSysMetadataModified>2022-09-13T23:12:58.833+00:00</dateSysMetadataModified>
+    <originMemberNode>urn:node:KNB</originMemberNode>
+    <authoritativeMemberNode>urn:node:KNB</authoritativeMemberNode>
+    <fileName>The_effects_of_varying_temperature_on_the.xml</fileName>
+</ns3:systemMetadata>

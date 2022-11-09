@@ -1,0 +1,176 @@
+---
+title: "Project"
+author: "Sierra Hess"
+date: "11/9/2022"
+output: html_document
+---
+Set things up
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify)
+```
+Now let's pull in the data:
+```{r}
+dry_mass <- read.csv(here("Data", "dry_mass_metadata.csv"),stringsAsFactors = TRUE)
+germination <- read.csv(here("Data", "germination_data.csv"),stringsAsFactors = TRUE)
+```
+# Before we begin any analysis, we need to check our data for possible errors/outliers.
+
+Species Names:
+```{r}
+levels(dry_mass$species)
+levels(germination$species)
+```
+This looks good, so now we can look at relationships.
+
+## We can start off by looking at histograms for the data. 
+```{r}
+ggplot(dry_mass, aes(x = mass))+
+     geom_histogram()
+```
+
+This plot looks reasonable with no obvious outliers.
+
+## Now check soil moisture
+```{r}
+ggplot(germination, aes(x = soil_moisture))+
+     geom_histogram()
+```
+
+This plot also looks reasonable. 
+
+## Let's also just run a summary on all the variables:
+```{r}
+summary(dry_mass)
+summary(germination)
+```
+
+From the summary table, there are no clear issues with the dataset. 
+
+# Now we can look at the soil moisture relation to each species
+Because we have count data, using a bar graph is okay.
+
+```{r}
+ggplot(germination, aes(x = species, y = number_germinated))+
+     geom_bar(stat= "identity", position = "dodge")
+```
+
+We can see that the Salvia columbarie species had low germination rates while the other three species had much a much higher number of germinated plants.
+
+Species is a categorical variable and the number of plants germinated is a discrete variable, so the likely test is a Chi-square test for independence. In order to run this test, we need our data summarized in a matrix.
+
+```{r}
+germ.mat <- xtabs(number_germinated ~ species, data = germination)
+germ.mat
+```
+Now we can run the test
+```{r}
+chisq.test(germ.mat)
+```
+
+Our null hypothesis is that there is no difference in the number of germinated plants between species. However,  we can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between species.
+
+# Next we can look at how mass varies between species
+
+Let's first plot the data by using a boxplot.
+
+```{r}
+ggplot(dry_mass, aes(species, mass))+
+     geom_boxplot()+
+     geom_point(alpha = 0.5)
+```
+
+There is a point that appears fairly distant from the mean in the Phacelia tanacetifolia plot, but there isn't a clear outlier.
+
+
+Now we can put the data into matrix form so that we can run a chisq.test
+```{r}
+mass.mat <- xtabs(mass ~ species, data = dry_mass)
+mass.mat
+```
+Now we can run the test
+```{r}
+chisq.test(mass.mat)
+```
+
+Since we have a low p value, we can reject the null hypothesis and there is a clear relationship between the species and mass. 
+
+# Lets look at levels and mass
+```{r}
+low_med_data<-dry_mass %>% filter(factor == "Low" | factor == "Medium")
+
+low_med_data$factor <- factor(low_med_data$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(low_med_data, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+The plots look similar, but lets do a formal test. 
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = low_med_data)
+MyT
+```
+We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and medium factors.
+
+## Now for medium and high
+
+```{r}
+med_high_data<-dry_mass %>% filter(factor == "Medium" | factor == "High")
+
+med_high_data$factor <- factor(med_high_data$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(med_high_data, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+The plots look to be slightly different, but lets do a formal test. 
+
+Now let's do a t-test
+```{r}
+MyT2<-t.test(mass ~ factor, data = med_high_data)
+MyT2
+```
+We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for medium and high factors.
+
+## Now lets do low vs high factors
+
+```{r}
+low_high_data<-dry_mass %>% filter(factor == "Low" | factor == "High")
+
+low_high_data$factor <- factor(low_high_data$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(low_high_data, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+The plots look similar, but lets do a formal test. 
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = low_high_data)
+MyT
+```
+We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and high factors. However, the p value was lowest for low vs high, so there is the highest level of difference between low and high factors when compared to high and med and low and med. 
+

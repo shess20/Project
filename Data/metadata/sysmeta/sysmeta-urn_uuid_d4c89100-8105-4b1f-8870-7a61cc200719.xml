@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns3:systemMetadata xmlns:ns2="http://ns.dataone.org/service/types/v1" xmlns:ns3="http://ns.dataone.org/service/types/v2.0">
+    <serialVersion>0</serialVersion>
+    <identifier>urn:uuid:d4c89100-8105-4b1f-8870-7a61cc200719</identifier>
+    <formatId>text/csv</formatId>
+    <size>1025887</size>
+    <checksum algorithm="MD5">679f33061622aaf6395e8e6b89610231</checksum>
+    <submitter>http://orcid.org/0000-0001-8114-3609</submitter>
+    <rightsHolder>http://orcid.org/0000-0001-8114-3609</rightsHolder>
+    <accessPolicy>
+        <allow>
+            <subject>CN=knb-data-admins,DC=dataone,DC=org</subject>
+            <permission>read</permission>
+            <permission>write</permission>
+            <permission>changePermission</permission>
+        </allow>
+        <allow>
+            <subject>public</subject>
+            <permission>read</permission>
+        </allow>
+    </accessPolicy>
+    <replicationPolicy replicationAllowed="false"/>
+    <obsoletes>urn:uuid:2a156b87-44dd-4969-af70-023dd67a03ff</obsoletes>
+    <archived>false</archived>
+    <dateUploaded>2022-09-13T23:09:47.636+00:00</dateUploaded>
+    <dateSysMetadataModified>2022-09-13T23:09:47.925+00:00</dateSysMetadataModified>
+    <originMemberNode>urn:node:KNB</originMemberNode>
+    <authoritativeMemberNode>urn:node:KNB</authoritativeMemberNode>
+    <fileName>germination_data.csv</fileName>
+</ns3:systemMetadata>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns3:systemMetadata xmlns:ns2="http://ns.dataone.org/service/types/v1" xmlns:ns3="http://ns.dataone.org/service/types/v2.0">
+    <serialVersion>0</serialVersion>
+    <identifier>urn:uuid:f55e80dc-14de-406c-9694-1335ce200551</identifier>
+    <formatId>text/csv</formatId>
+    <size>29678075</size>
+    <checksum algorithm="MD5">7e616f052d425f4ec26a969650da0abb</checksum>
+    <submitter>http://orcid.org/0000-0001-8114-3609</submitter>
+    <rightsHolder>http://orcid.org/0000-0001-8114-3609</rightsHolder>
+    <accessPolicy>
+        <allow>
+            <subject>CN=knb-data-admins,DC=dataone,DC=org</subject>
+            <permission>read</permission>
+            <permission>write</permission>
+            <permission>changePermission</permission>
+        </allow>
+        <allow>
+            <subject>public</subject>
+            <permission>read</permission>
+        </allow>
+    </accessPolicy>
+    <replicationPolicy replicationAllowed="false"/>
+    <obsoletes>urn:uuid:412e7feb-39be-44c5-bc5d-51e7bafd0408</obsoletes>
+    <archived>false</archived>
+    <dateUploaded>2022-09-13T23:12:13.613+00:00</dateUploaded>
+    <dateSysMetadataModified>2022-09-13T23:12:13.776+00:00</dateSysMetadataModified>
+    <originMemberNode>urn:node:KNB</originMemberNode>
+    <authoritativeMemberNode>urn:node:KNB</authoritativeMemberNode>
+    <fileName>microclimate.csv</fileName>
+</ns3:systemMetadata>
