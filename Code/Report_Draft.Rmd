@@ -1,0 +1,328 @@
+---
+title: "Report Draft"
+author: "Sierra Hess"
+date: "11/14/2022"
+output: html_document
+---
+
+# Introduction: 
+
+I chose a data set containing data about how temperature affects the germination and plant mass of four different plants found in a California forest. The data includes information about the time spent observing the plants, the  number of repetitions, the light strength, temperature intensity, soil moisture, number of plants, and masses.   From this data, I would like to model the masses based on temperature and how the given plants grow over time depending on temperature. I can also look into how light intensity and soil moisture had an affect on plant growth and mass and how different species react differently to different light, moisture and temperature conditions. 
+
+## What are my expected results?
+I hypothesize that there will a positive relationship between light and dry mass. The article “Timing and Duration of Supplemental Lighting during the Seedling Stage Influence Quality and Flowering in Petunia and Pansy,” by Wook Oh from Jeju National University, Erik Runkle from Michigan State University and Ryan M Warner who is also from Michigan State University looks into how light affects the dry mass of seedlings. They found  that in both growing seasons, there was a positive slope in the data meaning that as the light increased, the dry mass increased. Also, the article gave r squared values which tell us how much of the variability in the data can be related back to the model that considered dry  mass and light. In the first season, only 54% of the variability was related to the model, but in the second season, 78% of the variability was related to the model. Since the r squared isn’t super high, I think that adding species to the model will raise these numbers and this model will be a better predictor of the dry mass. Since different species require different amounts of light, I predict that some plants will survive better in high light intensity while others may be killed off by too high of a light intensity and may grow better in lower light areas. In general, I think that there will be a consistently positive relationship with a decreasing slope as light intensity increases and eventually, there will probably be an asymptote where the light is too intense to support life within a species. However, since the data only looks at three light intensities (high, low, medium), I don’t think that we will see that in this data.  In order to visualize the model, I will model the data by looking at histograms and box plots. I can use histograms by modeling just one species at a time and how mass changes based on light intensity and I can look at how the mass changes when we model both independent variables together. I also plan to use a simple linear regression since we are looking at continuous and categorical data for the predictor and continuous data for the response. 
+
+I predict that there will be a positive relationship between light intensity and germination. According to the journal, “Effect of light on seed germination and seedling shape of succulent species from Mexico,” by Joel Flores, Claudia González-Salvatierra, and Enrique Jurado, “The influence of light on germination has also been associated with plant growth form (seeds from columnar cacti being neutral photoblastic, and the barrel-shaped and globose being positive photoblastic; Rojas-Aréchiga et al. 1997); perenniality (light promotes the germination of annual species; de Villiers et al. 2002); plant size (seeds from shorter plants have a stronger light requirement for germination than those from taller plants; Flores et al. 2011); and seed size (seeds requiring light are small; Flores et al. 2006, 2011),”(Flores,  González-Salvatierra, Jurado). From this, I believe that the more light that is present, generally, the more the plant is able to grow and the higher the number of germinated plants there will be. Without sufficient light, plants can’t germinate, so I assume that the more light that is present, the more likely  a plant is to grow and the more plants that will germinate with high light than low light. I plan to model this data by looking at bar graphs since a bar graph will show exactly how the different light intensities affect the number of plants germinated and this will allow us to visually see the differences in plant growth depending on light intensity. I also plan to use a multiple regression test since we have two discrete variables. 
+
+I predict that there will be a positive relationship between soil moisture  and germination that will be significantly significant. In the article, “Soil Moisture & Corn Seed Depth by R.L.” by Bob Nielsen, Nielsen wrote about how, “adequate soil moisture at seed depth (not too wet, not too dry) during those first 48 hours helps ensure rapid germination of the seed. If the soil at seed depth is excessively dry, the seed will remain inert until moisture is replenished. If soil moisture is excessive at the seed depth (e.g., saturated), the seeds may die and rot.” (Nielsen).  This means that the seed requires a very specific amount of moisture to be germinated. Since the data shows different moisture levels in different pots, so it is likely that the moisture had an effect on the growth of the plants and light intensity wasn’t the only factor affecting the data.  I plan to model this data with a scatterplot that will show the relationship between the moisture and germination. Here, I will also use a multiple regression test since we are looking at a continuous independent variable and a discrete dependent variable. 
+
+
+# Analysis 
+
+Set things up
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify)
+```
+Now let's pull in the data:
+```{r}
+dry_mass <- read.csv(here("Data", "dry_mass_metadata.csv"),stringsAsFactors = TRUE)
+germination <- read.csv(here("Data", "germination_data.csv"),stringsAsFactors = TRUE)
+```
+## Before we begin any analysis, we need to check our data for possible errors/outliers.
+
+Species Names:
+```{r}
+levels(dry_mass$species)
+levels(germination$species)
+```
+
+The names look good.
+
+## We can start off by looking at histograms for the data. 
+```{r}
+ggplot(dry_mass, aes(x = mass))+
+     geom_histogram()
+```
+
+There are no clear outliers in this data.
+
+## Now check soil moisture
+```{r}
+ggplot(germination, aes(x = soil_moisture))+
+     geom_histogram()
+```
+
+There are no clear outliers in this data. 
+
+## Let's also just run a summary on all the variables:
+```{r}
+summary(dry_mass)
+summary(germination)
+```
+
+From the summary table, there are no clear issues with the dataset. 
+
+# Lets first  look at light levels and mass for all data
+```{r}
+low_med_data<-dry_mass %>% filter(factor == "Low" | factor == "Medium")
+
+low_med_data$factor <- factor(low_med_data$factor)
+```
+
+Lets look at a figure of the data
+```{r}
+ggplot(low_med_data, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = low_med_data)
+MyT
+```
+We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and medium factors.
+
+## Now for medium and high
+
+```{r}
+med_high_data<-dry_mass %>% filter(factor == "Medium" | factor == "High")
+
+med_high_data$factor <- factor(med_high_data$factor)
+```
+
+Lets look at a figure of the data
+```{r}
+ggplot(med_high_data, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+Now let's do a t-test
+```{r}
+MyT2<-t.test(mass ~ factor, data = med_high_data)
+MyT2
+```
+We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for medium and high factors.
+
+## Now lets do low vs high factors
+
+```{r}
+low_high_data<-dry_mass %>% filter(factor == "Low" | factor == "High")
+
+low_high_data$factor <- factor(low_high_data$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(low_high_data, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = low_high_data)
+MyT
+```
+We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and high factors. However, the p value was lowest for low vs high, so there is the highest level of difference between low and high factors when compared to high and med and low and med. 
+
+## Now lets select one species alone and compare its mass at low and high light levels
+```{r}
+salvia <- filter(dry_mass,dry_mass$species == "Salvia columbariae")
+layia <- filter(dry_mass,dry_mass$species == "Layia platyglossa")
+bromus <- filter(dry_mass,dry_mass$species == "Bromus rubens")
+phacelia <- filter(dry_mass,dry_mass$species == "Phacelia tanacetifolia")
+```
+```{r}
+salvia_low_high<-salvia %>% filter(factor == "Low" | factor == "High")
+
+salvia_low_high$factor <- factor(salvia_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(salvia_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = salvia_low_high)
+MyT
+```
+We can't reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and high factors in the Salvia columbariae species.
+
+## Now lets look at Layia platyglossa species
+```{r}
+layia_low_high <-layia %>% filter(factor == "Low" | factor == "High")
+
+layia_low_high$factor <- factor(layia_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(layia_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = layia_low_high)
+MyT
+```
+Since our p value > .05, we cannot reject the null hypothesis and there is no clear relationship between high and low factors in the layia data. 
+
+## Now lets look at the bromus species data
+
+```{r}
+bromus_low_high <-bromus %>% filter(factor == "Low" | factor == "High")
+
+bromus_low_high$factor <- factor(bromus_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(bromus_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = bromus_low_high)
+MyT
+```
+The p value is much smaller than .05, so we can reject the null hypothesis and there is a significant difference between mass for low and high levels. 
+
+## Let's now look at the phacelia species
+
+```{r}
+phacelia_low_high <- phacelia %>% filter(factor == "Low" | factor == "High")
+
+phacelia_low_high$factor <- factor(phacelia_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(phacelia_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = phacelia_low_high)
+MyT
+```
+The p value is smaller than .05, so we can reject the null hypothesis and there is a significant difference between mass for low and high levels. 
+
+
+# Lets consider germination based on light level
+```{r}
+ggplot(germination, aes(x = factor, y = number_germinated))+
+     geom_bar(stat= "identity", position = "dodge")
+```
+There is not a clear difference between factor and number germinated from the plot.
+
+```{r}
+germ.mat <- xtabs(number_germinated ~ factor, data = germination)
+germ.mat
+```
+Now we can run the test
+```{r}
+chisq.test(germ.mat)
+```
+
+We can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between light factors.
+
+
+# Now we can look at the soil moisture relation to germination
+## First lets see if there is a difference between the species and germination
+Because we have count data, using a bar graph is okay.
+
+```{r}
+ggplot(germination, aes(x = species, y = number_germinated))+
+     geom_bar(stat= "identity", position = "dodge")
+```
+
+We can see that the Salvia columbarie species had low germination rates while the other three species had much a much higher number of germinated plants.
+
+Species is a categorical variable and the number of plants germinated is a discrete variable, so the likely test is a Chi-square test for independence. In order to run this test, we need our data summarized in a matrix.
+
+```{r}
+germ.mat <- xtabs(number_germinated ~ species, data = germination)
+germ.mat
+```
+Now we can run the test
+```{r}
+chisq.test(germ.mat)
+```
+
+Our null hypothesis is that there is no difference in the number of germinated plants between species. However,  we can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between species.
+
+## Now lets look at the soil moisture vs germination
+
+```{r}
+ggplot(germination, aes(x = soil_moisture, y = number_germinated))+
+     geom_bar(stat= "identity", position = "dodge")
+```
+
+```{r}
+germ.mat <- xtabs(number_germinated ~ soil_moisture, data = germination)
+germ.mat
+```
+Now we can run the test
+```{r}
+chisq.test(germ.mat)
+```
+
+We can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between soil_moisture.
+
+
+
+# Biological Summary 
+
+We first found that there was no clear relationship between light intensity and dry mass when we looked at all species together. This makes sense given that we assumed that different species would respond differently different levels of light. Some plants are known to survive better with more light while other plants require shade and less light. Next, we looked at the difference in mass between high and low light for all species separately. There seemed to be a correlation between light level and mass in only about half of the species. This may be due to the fact that the species that didn't show a correlation do best in med light and worse in low or high light or there may have simply not been much of difference between mass given the different light levels. 
+
+
+Next, we looked at how light affected germination. We saw that there was a significant correlation between light factor and germination. This makes sense because light is required for plant growth, so you would expect too little light to result in no germination,  but too high of a light factor would kill off the plant as well.  
+
+
+Finally, we can see that there is a clear difference in the number of germinated plants between species. Our p test gave us a value of <.05 and our graph clearly showed a difference in the number of germinated plants for the different species. This makes sense since different species grow better in different conditions. Then we looked at how the germination was related to soil moisture and we again saw that there was a clear correlation between soil moisture and germination which again makes sense given that overwatering or underwatering plants can affect their growth. 
+
+
+# Challenges 
+One challenge that I faced was figuring out which statistical tests to do and how to get the data into the correct forms to do the test. For example, I had to put my data into a matrix for my chi squared tests and I had to adjust my models when I noticed that they didn't work or weren't effective. 
+
+Also, I had a lot of trial and error when trying to remember code. I had to look through old assignments in order to remember how to set up different graphs and save data in the correct formats.
+
+
+
+
+
+
+
+
+
+
+
+
+

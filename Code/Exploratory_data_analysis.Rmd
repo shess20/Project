@@ -23,6 +23,13 @@ Species Names:
 levels(dry_mass$species)
 levels(germination$species)
 ```
+The germination data has a mispelling of Salvia columbariae, so we can fix this. 
+
+```{r}
+
+```
+
+
 This looks good, so now we can look at relationships.
 
 ## We can start off by looking at histograms for the data. 
@@ -50,6 +57,8 @@ summary(germination)
 From the summary table, there are no clear issues with the dataset. 
 
 # Now we can look at the soil moisture relation to each species
+
+
 Because we have count data, using a bar graph is okay.
 
 ```{r}
@@ -71,6 +80,32 @@ chisq.test(germ.mat)
 ```
 
 Our null hypothesis is that there is no difference in the number of germinated plants between species. However,  we can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between species.
+
+## Now lets look at germination vs soil moisture 
+
+```{r}
+ggplot(germination, aes(x = soil_moisture, y = number_germinated))+
+     geom_bar(stat= "identity", position = "dodge")
+```
+
+We can see that the
+Species is a categorical variable and the number of plants germinated is a discrete variable, so the likely test is a Chi-square test for independence. In order to run this test, we need our data summarized in a matrix.
+
+```{r}
+germ.mat <- xtabs(number_germinated ~ factor, data = germination)
+germ.mat
+```
+Now we can run the test
+```{r}
+chisq.test(germ.mat)
+```
+
+We can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between light factors.
+
+
+
+
+
 
 # Next we can look at how mass varies between species
 
@@ -173,4 +208,119 @@ MyT<-t.test(mass ~ factor, data = low_high_data)
 MyT
 ```
 We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and high factors. However, the p value was lowest for low vs high, so there is the highest level of difference between low and high factors when compared to high and med and low and med. 
+
+# Select one species alone and compare low and high light levels
+```{r}
+salvia <- filter(dry_mass,dry_mass$species == "Salvia columbariae")
+layia <- filter(dry_mass,dry_mass$species == "Layia platyglossa")
+bromus <- filter(dry_mass,dry_mass$species == "Bromus rubens")
+phacelia <- filter(dry_mass,dry_mass$species == "Phacelia tanacetifolia")
+```
+```{r}
+salvia_low_high<-salvia %>% filter(factor == "Low" | factor == "High")
+
+salvia_low_high$factor <- factor(salvia_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(salvia_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+The plots look similar, but lets do a formal test. 
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = salvia_low_high)
+MyT
+```
+We can't reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and high factors in the Salvia columbariae species.
+
+## Now lets look at Layia platyglossa species
+```{r}
+layia_low_high <-layia %>% filter(factor == "Low" | factor == "High")
+
+layia_low_high$factor <- factor(layia_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(layia_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+
+The plots look similar, but lets do a formal test. 
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = layia_low_high)
+MyT
+```
+Since our p value > .05, we cannot reject the null hypothesis and there is no clear relationship between high and low factors in the layia data. 
+
+## Now lets look at the bromus species data
+
+```{r}
+bromus_low_high <-bromus %>% filter(factor == "Low" | factor == "High")
+
+bromus_low_high$factor <- factor(bromus_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(bromus_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+The plots look different, but lets do a formal test. 
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = bromus_low_high)
+MyT
+```
+The p value is much smaller than .05, so we can reject the null hypothesis and there is a significant difference between mass for low and high levels. 
+
+## Let's now look at the phacelia species
+
+```{r}
+phacelia_low_high <- phacelia %>% filter(factor == "Low" | factor == "High")
+
+phacelia_low_high$factor <- factor(phacelia_low_high$factor)
+```
+
+Lets look at a figure of the data
+
+```{r}
+ggplot(phacelia_low_high, aes(factor, mass))+
+     geom_boxplot()+
+     geom_point(position = "jitter", size = 2, alpha = 0.5)+
+     theme_bw()
+```
+The plots look slightly different, but lets do a formal test. 
+
+Now let's do a t-test
+```{r}
+MyT<-t.test(mass ~ factor, data = phacelia_low_high)
+MyT
+```
+The p value is smaller than .05, so we can reject the null hypothesis and there is a significant difference between mass for low and high levels. 
+
+
+
+
+
+
+
+
+
 
