@@ -7,15 +7,34 @@ output: html_document
 
 # Introduction: 
 
-I chose a data set containing data about how temperature affects the germination and plant mass of four different plants found in a California forest. The data includes information about the time spent observing the plants, the  number of repetitions, the light strength, temperature intensity, soil moisture, number of plants, and masses.   From this data, I would like to model the masses based on temperature and how the given plants grow over time depending on temperature. I can also look into how light intensity and soil moisture had an affect on plant growth and mass and how different species react differently to different light, moisture and temperature conditions. 
+I chose a data set containing data about how temperature affects the germination and plant biomass of four different plant species found in a California forest. The data includes information about the time spent observing the plants, the  number of repetitions, the light strength, temperature intensity, soil moisture, number of plants, and masses.   From this data, I would like to model the masses based on temperature and how the given plants grow over time depending on temperature. I can also look into how light intensity and soil moisture had an affect on plant growth and mass and how different species react differently to different light, moisture and temperature conditions. 
+
+Please provide a citation for the dataset in the introduction.
 
 ## What are my expected results?
-I hypothesize that there will a positive relationship between light and dry mass. The article “Timing and Duration of Supplemental Lighting during the Seedling Stage Influence Quality and Flowering in Petunia and Pansy,” by Wook Oh from Jeju National University, Erik Runkle from Michigan State University and Ryan M Warner who is also from Michigan State University looks into how light affects the dry mass of seedlings. They found  that in both growing seasons, there was a positive slope in the data meaning that as the light increased, the dry mass increased. Also, the article gave r squared values which tell us how much of the variability in the data can be related back to the model that considered dry  mass and light. In the first season, only 54% of the variability was related to the model, but in the second season, 78% of the variability was related to the model. Since the r squared isn’t super high, I think that adding species to the model will raise these numbers and this model will be a better predictor of the dry mass. Since different species require different amounts of light, I predict that some plants will survive better in high light intensity while others may be killed off by too high of a light intensity and may grow better in lower light areas. In general, I think that there will be a consistently positive relationship with a decreasing slope as light intensity increases and eventually, there will probably be an asymptote where the light is too intense to support life within a species. However, since the data only looks at three light intensities (high, low, medium), I don’t think that we will see that in this data.  In order to visualize the model, I will model the data by looking at histograms and box plots. I can use histograms by modeling just one species at a time and how mass changes based on light intensity and I can look at how the mass changes when we model both independent variables together. I also plan to use a simple linear regression since we are looking at continuous and categorical data for the predictor and continuous data for the response. 
+I hypothesize that there will a positive relationship between light availability and plant dry mass. The article “Timing and Duration of Supplemental Lighting during the Seedling Stage Influence Quality and Flowering in Petunia and Pansy,” by Wook Oh from Jeju National University, Erik Runkle from Michigan State University and Ryan M Warner who is also from Michigan State University looks into how light affects the dry mass of seedlings. They found  that in both growing seasons, there was a positive slope in the data meaning that as the light increased, the dry mass increased. Also, the article gave r squared values which tell us how much of the variability in the data can be related back to the model that considered dry  mass and light. In the first season, only 54% of the variability was related to the model, but in the second season, 78% of the variability was related to the model. Since the r squared isn’t super high, I think that adding species to the model will raise these numbers and this model will be a better predictor of the dry mass. Since different species require different amounts of light, I predict that some plants will survive better in high light intensity while others may be killed off by too high of a light intensity and may grow better in lower light areas. 
+
+You just described a biological interaction!
+
+In general, I think that there will be a consistently positive relationship with a decreasing slope as light intensity increases and eventually, there will probably be an asymptote where the light is too intense to support life within a species. However, since the data only looks at three light intensities (high, low, medium), I don’t think that we will see that in this data.  In order to visualize the model, I will model the data by looking at histograms and box plots. I can use histograms by modeling just one species at a time and how mass changes based on light intensity and I can look at how the mass changes when we model both independent variables together. I also plan to use a simple linear regression since we are looking at continuous and categorical data for the predictor and continuous data for the response. 
+
+You have two categorical variables: light (low, med, high) and species. Continuous response. What kind of test works in this situation?
+
+This is a lot of text. Can you break it up with e.g. bullet points or lists? Please condense your citations as well.
 
 I predict that there will be a positive relationship between light intensity and germination. According to the journal, “Effect of light on seed germination and seedling shape of succulent species from Mexico,” by Joel Flores, Claudia González-Salvatierra, and Enrique Jurado, “The influence of light on germination has also been associated with plant growth form (seeds from columnar cacti being neutral photoblastic, and the barrel-shaped and globose being positive photoblastic; Rojas-Aréchiga et al. 1997); perenniality (light promotes the germination of annual species; de Villiers et al. 2002); plant size (seeds from shorter plants have a stronger light requirement for germination than those from taller plants; Flores et al. 2011); and seed size (seeds requiring light are small; Flores et al. 2006, 2011),”(Flores,  González-Salvatierra, Jurado). From this, I believe that the more light that is present, generally, the more the plant is able to grow and the higher the number of germinated plants there will be. Without sufficient light, plants can’t germinate, so I assume that the more light that is present, the more likely  a plant is to grow and the more plants that will germinate with high light than low light. I plan to model this data by looking at bar graphs since a bar graph will show exactly how the different light intensities affect the number of plants germinated and this will allow us to visually see the differences in plant growth depending on light intensity. I also plan to use a multiple regression test since we have two discrete variables. 
 
+Multiple regression? Do you mean linear regression? You only have two variables: number germinated (discrete, response) and light availability (low, med,hig, categorical predictor). What kind of test is that?
+
+Again, please use proper citation formats.
+
 I predict that there will be a positive relationship between soil moisture  and germination that will be significantly significant. In the article, “Soil Moisture & Corn Seed Depth by R.L.” by Bob Nielsen, Nielsen wrote about how, “adequate soil moisture at seed depth (not too wet, not too dry) during those first 48 hours helps ensure rapid germination of the seed. If the soil at seed depth is excessively dry, the seed will remain inert until moisture is replenished. If soil moisture is excessive at the seed depth (e.g., saturated), the seeds may die and rot.” (Nielsen).  This means that the seed requires a very specific amount of moisture to be germinated. Since the data shows different moisture levels in different pots, so it is likely that the moisture had an effect on the growth of the plants and light intensity wasn’t the only factor affecting the data.  I plan to model this data with a scatterplot that will show the relationship between the moisture and germination. Here, I will also use a multiple regression test since we are looking at a continuous independent variable and a discrete dependent variable. 
 
+Wrong statistical model.
+
+Signficantly significant??? (line 31).  Please use proper citation format. 
+
+As a special twist, because you have pots on tables, we need to control for some "random effects" in your models. But it is difficult to tell since I don't really have access to your metadata.
 
 # Analysis 
 
@@ -47,7 +66,8 @@ ggplot(dry_mass, aes(x = mass))+
      geom_histogram()
 ```
 
-There are no clear outliers in this data.
+There are no clear outliers in this data. 
+But there are a LOT of zeros. Why? And what does this tell you about the possible mean value? It might be good to plot histograms faceted by species, as well.
 
 ## Now check soil moisture
 ```{r}
@@ -63,7 +83,9 @@ summary(dry_mass)
 summary(germination)
 ```
 
-From the summary table, there are no clear issues with the dataset. 
+From the summary table, there are no clear issues with the dataset.
+
+there may not be issues, but what do you LEARN about your data from examining the summary table? ARe there some variables that are in as chr or numeric that should be changed to factor? What do you learn about means and range in data?
 
 # Lets first  look at light levels and mass for all data
 ```{r}
@@ -71,7 +93,7 @@ low_med_data<-dry_mass %>% filter(factor == "Low" | factor == "Medium")
 
 low_med_data$factor <- factor(low_med_data$factor)
 ```
-
+See my notes on exploratory analysis
 Lets look at a figure of the data
 ```{r}
 ggplot(low_med_data, aes(factor, mass))+
@@ -80,12 +102,19 @@ ggplot(low_med_data, aes(factor, mass))+
      theme_bw()
 ```
 
-Now let's do a t-test
+Now let's do a t-test. 
+
+I'd like you to explicitly guesstimate the relationship before you formalize the test. What do you think the mean is for each group? Do you think the means will be different? Why or why not? What is your hypothesis?
+
+
+Not a t-test - see my notes in data exploration. Wrong model (it is incorrect to isolate just some of the light treatments so that a t-test fits.)
 ```{r}
 MyT<-t.test(mass ~ factor, data = low_med_data)
 MyT
 ```
 We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and medium factors.
+
+Do not use this approach.
 
 ## Now for medium and high
 
@@ -133,6 +162,9 @@ MyT<-t.test(mass ~ factor, data = low_high_data)
 MyT
 ```
 We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and high factors. However, the p value was lowest for low vs high, so there is the highest level of difference between low and high factors when compared to high and med and low and med. 
+
+
+Again, using all those t-tests on subsets of the data is not allowed. What test would enable you to check low-med-high all together? It is a test we have learned.
 
 ## Now lets select one species alone and compare its mass at low and high light levels
 ```{r}
@@ -234,18 +266,23 @@ MyT
 ```
 The p value is smaller than .05, so we can reject the null hypothesis and there is a significant difference between mass for low and high levels. 
 
+Again, breaking up the data in this way is not allowed. You want to test how plant dry mass is related to species and light level. There is a specific test we have learned that allows you to do that. You will need to rework the analysis to address this.
+
 
 # Lets consider germination based on light level
 ```{r}
 ggplot(germination, aes(x = factor, y = number_germinated))+
      geom_bar(stat= "identity", position = "dodge")
 ```
-There is not a clear difference between factor and number germinated from the plot.
+There is not a clear difference between factor and number germinated from the plot. Also, it would make sense to plot these in order of light level from low to medium to high. Our book tells you how to do that (either in chapter 5 or chapter 6)
+
+But does it also differ by species? I think you need a two-way contingeny table there (factor and species)
 
 ```{r}
 germ.mat <- xtabs(number_germinated ~ factor, data = germination)
 germ.mat
 ```
+How come the table shows high as 25720 but the figure shows high as c. 35,000? There is a problem between the figure and the test.
 Now we can run the test
 ```{r}
 chisq.test(germ.mat)
@@ -275,6 +312,8 @@ Now we can run the test
 ```{r}
 chisq.test(germ.mat)
 ```
+This test can be combined with the one above it in a 2-way contingency test.
+
 
 Our null hypothesis is that there is no difference in the number of germinated plants between species. However,  we can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between species.
 
@@ -284,7 +323,9 @@ Our null hypothesis is that there is no difference in the number of germinated p
 ggplot(germination, aes(x = soil_moisture, y = number_germinated))+
      geom_bar(stat= "identity", position = "dodge")
 ```
+there is a problem here. Why did you plot this as a bar graph? You have a continuous x (soil moisture, integer) and a discrete y (number germinated). Try a scatter plot and color by species. Doing so will show you that lumping all the species together doesn't make much sense. 
 
+A chi-square test is incorrect here.
 ```{r}
 germ.mat <- xtabs(number_germinated ~ soil_moisture, data = germination)
 germ.mat
@@ -309,10 +350,14 @@ Next, we looked at how light affected germination. We saw that there was a signi
 Finally, we can see that there is a clear difference in the number of germinated plants between species. Our p test gave us a value of <.05 and our graph clearly showed a difference in the number of germinated plants for the different species. This makes sense since different species grow better in different conditions. Then we looked at how the germination was related to soil moisture and we again saw that there was a clear correlation between soil moisture and germination which again makes sense given that overwatering or underwatering plants can affect their growth. 
 
 
+All of the biological summary may change when you apply the correct tests.
+
 # Challenges 
 One challenge that I faced was figuring out which statistical tests to do and how to get the data into the correct forms to do the test. For example, I had to put my data into a matrix for my chi squared tests and I had to adjust my models when I noticed that they didn't work or weren't effective. 
 
 Also, I had a lot of trial and error when trying to remember code. I had to look through old assignments in order to remember how to set up different graphs and save data in the correct formats.
+
+
 
 
 
