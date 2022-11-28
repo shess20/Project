@@ -14,3 +14,6 @@ n_tables = 3
 n_reps = 70
 join_by = Factor
 variables = Low, Medium, and High temperature
+
+
+This is good, but you were also asked to provide all of the column headers and descriptions in a .txt file. You have copied all of the xml metadata from the source, but they can't be read from within R. Please fix.

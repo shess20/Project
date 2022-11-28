@@ -28,7 +28,7 @@ The germination data has a mispelling of Salvia columbariae, so we can fix this.
 ```{r}
 
 ```
-
+Ok but you didn't fix it? Why not?
 
 This looks good, so now we can look at relationships.
 
@@ -39,6 +39,8 @@ ggplot(dry_mass, aes(x = mass))+
 ```
 
 This plot looks reasonable with no obvious outliers.
+
+But notice that there are a lot of zeros. What does mass of zero mean?
 
 ## Now check soil moisture
 ```{r}
@@ -56,6 +58,10 @@ summary(germination)
 
 From the summary table, there are no clear issues with the dataset. 
 
+A bunch of the numeric variables are really factors (table #, pot # etc - where the number is equivalaent to a name)
+
+What about getting a better sense of central tendency with e.g. boxplot by species?
+
 # Now we can look at the soil moisture relation to each species
 
 
@@ -68,7 +74,12 @@ ggplot(germination, aes(x = species, y = number_germinated))+
 
 We can see that the Salvia columbarie species had low germination rates while the other three species had much a much higher number of germinated plants.
 
-Species is a categorical variable and the number of plants germinated is a discrete variable, so the likely test is a Chi-square test for independence. In order to run this test, we need our data summarized in a matrix.
+Do you think the other species were different from one another?
+
+Species is a categorical variable and the number of plants germinated is a discrete variable, so the likely test is a Chi-square test for independence. In order to run this test, we need our data summarized in a matrix. 
+
+Ok - now you're on to analysis. Anything left to do with data exploration?
+
 
 ```{r}
 germ.mat <- xtabs(number_germinated ~ species, data = germination)
@@ -91,6 +102,10 @@ ggplot(germination, aes(x = soil_moisture, y = number_germinated))+
 We can see that the
 Species is a categorical variable and the number of plants germinated is a discrete variable, so the likely test is a Chi-square test for independence. In order to run this test, we need our data summarized in a matrix.
 
+Species is not one of the variables! You need to be careful with copy/paste...
+
+This is incorrect - there is not a categorical variable here. So what kind of test will you use?
+
 ```{r}
 germ.mat <- xtabs(number_germinated ~ factor, data = germination)
 germ.mat
@@ -100,7 +115,10 @@ Now we can run the test
 chisq.test(germ.mat)
 ```
 
-We can reject our null hypothesis given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between light factors.
+We can reject our null hypothesis 
+which hypothesis was that?
+
+given that our p value is less than .05, so there is a statistically significant difference between the number of germinated plants between light factors.
 
 
 
@@ -121,6 +139,9 @@ There is a point that appears fairly distant from the mean in the Phacelia tanac
 
 
 Now we can put the data into matrix form so that we can run a chisq.test
+
+this is not a chi-square test.
+
 ```{r}
 mass.mat <- xtabs(mass ~ species, data = dry_mass)
 mass.mat
@@ -158,7 +179,7 @@ MyT
 We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for low and medium factors.
 
 ## Now for medium and high
-
+It is inappropriate to separate low-medium and then medium-high and run them as separate tests. LIkewise, if you are also comparing mass by species, then what you really need is a 2-way ANOVA. Can you tell me 1) why you shouldn't chop the data up into smaller data sets and 2) why a 2 -way anova would be the right test?
 ```{r}
 med_high_data<-dry_mass %>% filter(factor == "Medium" | factor == "High")
 
@@ -184,6 +205,7 @@ MyT2
 We cannot reject the null hypothesis given that p > .05, so there is no clear difference between mass for medium and high factors.
 
 ## Now lets do low vs high factors
+See above - inappropriate to test in this way.
 
 ```{r}
 low_high_data<-dry_mass %>% filter(factor == "Low" | factor == "High")
@@ -221,6 +243,7 @@ salvia_low_high<-salvia %>% filter(factor == "Low" | factor == "High")
 
 salvia_low_high$factor <- factor(salvia_low_high$factor)
 ```
+Nope - you really should be doing a 2-way anova here.
 
 Lets look at a figure of the data
 
@@ -315,7 +338,7 @@ MyT
 ```
 The p value is smaller than .05, so we can reject the null hypothesis and there is a significant difference between mass for low and high levels. 
 
-
+Much of this file is data analysis - if you plan to use any of these tests in your formal analysis part, you should take into account the suggestions I have made.
 
 
 
