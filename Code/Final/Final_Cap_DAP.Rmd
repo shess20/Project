@@ -3,8 +3,8 @@ title: "Final Cap Dap"
 author: "Sierra Hess"
 date: "12/14/2022"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 # Introduction: 
@@ -178,7 +178,15 @@ summary(mod)
 
 This tells us that the model is useful and there is a clear relationship between the soil moisture and the number of plants germinated. 
 
+## Lets summarize with a final plot
 
+```{r}
+ggplot(germination, aes(soil_moisture, number_germinated, color = species))+
+  geom_boxplot() +
+  geom_point(alpha = 0.01) +
+  coord_flip()
+```
+This plot shows us how there is a clear difference between the mean number germinated based on the soil moisture for the different species. 
 # Biological Summary 
 We first found that there was no clear relationship between light intensity and dry mass. We saw that there was a large p value which meant that there wasn't a clear correlation. This was somewhat surprising since I expected the light factor to have a strong relationship with plant growth, but there was only a weak correlation (if any) between the light intensity and plant mass. Next, we looked at how light affected germination. We saw that there was a significant correlation between light factor and germination since our p value was low. This makes sense because light is required for plant growth, so you would expect too little light to result in no germination,  but too high of a light factor would kill off the plant as well. Finally, we can see that there is a clear difference in the number of germinated plants with different soil moistures given the low p value for model 3. This makes sense since soil is required for plant growth, but some species of plants also can't grow in conditions where they are over saturated with water. 
 
