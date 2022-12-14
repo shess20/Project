@@ -1,0 +1,186 @@
+---
+title: "Final Cap Dap"
+author: "Sierra Hess"
+date: "11/29/2022"
+output: html_document
+---
+# Introduction: 
+
+I chose a data set  collected by Mario Zuliani, Laura Brussa, Jessica Cunsolo, Angela Zuliani, and Christopher Lortie in 2021("The effects of varying temperature on the germination of California natives and invasive plant species"). This dataset contains data about how temperature affects the germination and plant biomass of four different plant species found in a California forest. The data includes information about the time spent observing the plants, the  number of repetitions, the light strength, temperature intensity, soil moisture, number of plants, and masses.   From this data, I would like to model the masses based on temperature and how the given plants grow over time depending on temperature. I can also look into how light intensity and soil moisture had an affect on plant growth and mass and how different species react differently to different light, moisture and temperature conditions. 
+
+## What are my expected results?
+### Test #1: Light intensity relation to dry mass. 
+I hypothesize that there will a positive relationship between light and dry mass for all species, meaning that there will be the highest masses when the light intensity is the highest. (Light intensity is measured in lightbulb strength of 40, 60, and 100 percent)The article “Timing and Duration of Supplemental Lighting during the Seedling Stage Influence Quality and Flowering in Petunia and Pansy,” by Wook Oh from Jeju National University, Erik Runkle from Michigan State University and Ryan M Warner who is also from Michigan State University looks into how light affects the dry mass of seedlings. They found  that in both growing seasons, there was a positive slope in the data meaning that as the light increased, the dry mass increased. Also, the article gave r squared values which tell us how much of the variability in the data can be related back to the model that considered dry  mass and light. In the first season, only 54% of the variability was related to the model, but in the second season, 78% of the variability was related to the model. Since different species require different amounts of light, I predict that some plants will survive better in high light intensity while others may be killed off by too high of a light intensity and may grow better in lower light areas. In general, I think that there will be a consistently positive relationship with a decreasing slope as light intensity increases and eventually, there will probably be an asymptote where the light is too intense to support life within a species. However, since the data only looks at three light intensities (high, low, medium), I don’t think that we will see that in this data. In order to visualize the model, I will model the data by looking at histograms, scatter plots, and a final box plot. I can use histograms by modeling just one species at a time and how mass changes based on light intensity and I can look at how the mass changes when we model both independent variables together. I also plan to use an anova test since we are looking at continuous data for the predictor and two types of categorical data data for the response. 
+
+### Test #2
+I predict that there will be a positive relationship between light intensity and germination. When there is a high light intensity, I expect that there will be increased levels of germination. According to the journal, “Effect of light on seed germination and seedling shape of succulent species from Mexico,” by Joel Flores, Claudia González-Salvatierra, and Enrique Jurado, “The influence of light on germination has also been associated with plant growth form (seeds from columnar cacti being neutral photoblastic, and the barrel-shaped and globose being positive photoblastic); perenniality (light promotes the germination of annual species); plant size (seeds from shorter plants have a stronger light requirement for germination than those from taller plants); and seed size (seeds requiring light are small),”(Flores,  González-Salvatierra, Jurado). From this, I believe that the more light that is present, generally, the more the plant is able to grow and the higher the number of germinated plants there will be. Without sufficient light, plants can’t germinate, so I assume that the more light that is present, the more likely  a plant is to grow and the more plants that will germinate with high light than low light.I plan to model this data by looking at bar graphs since a bar graph will show exactly how the different light intensities affect the number of plants germinated and this will allow us to visually see the differences in plant growth depending on light intensity. I also plan to use a multiple regression test since we have two discrete variables. 
+
+### Test #3
+I predict that there will be a positive relationship between soil moisture  and germination. In the article, “Soil Moisture & Corn Seed Depth by R.L.” by Bob Nielsen, Nielsen wrote about how, “adequate soil moisture at seed depth (not too wet, not too dry) during those first 48 hours helps ensure rapid germination of the seed. If the soil at seed depth is excessively dry, the seed will remain inert until moisture is replenished. If soil moisture is excessive at the seed depth (e.g., saturated), the seeds may die and rot.” (Nielsen). This means that the seed requires a very specific amount of moisture to be germinated. Since the data shows different moisture levels in different pots, so it is likely that the moisture had an effect on the growth of the plants and light intensity wasn’t the only factor affecting the data.  I plan to model this data with a scatter plot that will show the relationship between the moisture and germination. Here, I will also use a multiple regression test since we are looking at a continuous independent variable and a discrete dependent variable. 
+
+
+# Analysis 
+
+```{r setup, include=FALSE}
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify)
+```
+
+```{r, echo=FALSE}
+dry_mass <- read.csv(here("Data", "dry_mass_metadata.csv"),stringsAsFactors = TRUE)
+germination <- read.csv(here("Data", "germination_data.csv"),stringsAsFactors = TRUE)
+```
+
+## Before we begin any analysis, we need to check our data for possible errors/outliers.
+```{r}
+summary(dry_mass)
+summary(germination)
+```
+
+Based on the output, everything seems correctly formatted and the values seem to be reasonable with no clear outliers. 
+
+Also, by looking at the values on the chart, we can see which data appears to be continuous and which data is categorical which we can use to fit the correct models when running our tests. 
+
+# Model #1: Light intensity relation to dry mass. 
+
+## We can first look at a plot of our data
+
+Lets first look at a scatterplot to see how the light intensity's relation to mass differs between species. 
+
+```{r}
+ggplot(dry_mass, aes(factor, mass, color = species, group = species))+
+     geom_point(position = "jitter", size = 1.25, alpha = 0.5)+
+     theme_bw()
+```
+
+This shows us that there appear to be somewhat higher masses for high lighting in the Phaclia tanaccetifolia species but it isn't clear if there is much corellation between factors and mass besides that for all species. 
+
+Lets see if a histogram gives us a clearer picture. 
+```{r}
+ggplot(dry_mass, aes(x = mass))+
+      geom_histogram(binwidth=.03)+
+       facet_wrap(~ factor + species, ncol = 4)+
+       theme_bw()+ 
+       xlim(-.0002, 1.5) 
+```
+
+This shows us that there seems to be varying reactions to light intensity across the different species. Some species have higher masses with higher light while other species do better in conditons with lower light, and we can't see a definate correlation when looking at mass and light factors. 
+
+## Now lets create a model and test our hypothesis statistically
+
+Again, we hypothesized that there would be higher masses for higher light factors when we group by species. 
+
+For this model, we are comparing 2 types of categorical data with continuous data, so we should compare the two using a two way anova test. 
+
+```{r}
+mod = lm(mass ~ factor + species, data = dry_mass)
+anova(mod)
+summary(mod)
+```
+
+
+In this model, the factor has a p value > .05, so is not significantly useful in the model, but may be somewhat useful. The species has a p value < .05, so is useful in the model. 
+
+This means that there is a clear relationship between species and mass, but the light factor doesn't always accurately predict mass, so we can reject our hypothesis given that there isn't a super clear relationship between light factor and mass. 
+
+## Lets summarize with a final plot
+
+```{r}
+ggplot(dry_mass, aes(factor, mass, color = species))+
+  geom_boxplot() +
+  geom_point(alpha = 0.01) +
+  coord_flip()
+```
+
+This plot shows us that there seems to be fairly similar average masses despite light factors for each of the species. There is some variation of masses, but not a significant ammount. 
+
+
+# Model #2: Light intensity relation to germination
+
+## We can now look at a plot of our data
+
+Lets first look at a scatterplot to see how the light intensity's relation to mass differs between species. 
+
+```{r}
+ggplot(germination, aes(factor, number_germinated, color = species, group = species))+
+     geom_point(position = "jitter", size = .5, alpha = 2)+
+     theme_bw()
+```
+
+There seems to be somewhat of a correlation between factor and number germinated based on the differences in color gradient on the plot. 
+
+
+Lets see if a histogram gives us a clearer picture. 
+```{r}
+ggplot(germination, aes(x = number_germinated))+
+      geom_histogram(binwidth= 1)+
+       facet_wrap(~ factor + species, ncol = 4)+
+       theme_bw()+ 
+       xlim(-2,35) 
+```
+
+
+Here, we can see that there again appears to be somewhat of a difference between how the many of the species germinate based on light intensity. 
+
+## Now we can look at our data with an anova test 
+
+We can use an anova test since we are comparing our continuous count data  to two types of categorical data. 
+
+```{r}
+mod = lm(number_germinated ~ factor + species, data = germination)
+anova(mod)
+summary(mod)
+```
+P values are both < .05, so there is statistical significance to a model that uses factor and species to predict the number germinated. 
+
+Therefore there is a clear relation between factor and number germinated. 
+
+## Lets summarize with a final plot
+
+```{r}
+ggplot(germination, aes(factor, number_germinated, color = species))+
+  geom_boxplot() +
+  geom_point(alpha = 0.01) +
+  coord_flip()
+```
+
+This plot shows us how there is a clear difference between the mean number germinated based on the light factor for the different species. 
+
+
+# Model #3: Soil moisture relation to Germination 
+
+## We can first look at a plot of our data
+ 
+```{r}
+ggplot(germination, aes(x = soil_moisture, y = number_germinated, color = species, group = species))+
+  geom_point() + 
+  geom_smooth() +
+  theme_bw()
+  
+```
+
+This plot shows us that plants appear to germinate the best when the  moisture levels are not too high and not too low.
+
+## Now lets do a statistical test
+
+Since we have continuous data (soil moisture, integer) and a discrete data(number germinated) seperated by species, we can fit a multiple linear regression and run an anova test. 
+
+```{r}
+mod = lm(number_germinated ~ soil_moisture + species, data = germination)
+anova(mod)
+summary(mod)
+```
+
+This tells us that the model is useful and there is a clear relationship between the soil moisture and the number of plants germinated. 
+
+
+# Biological Summary 
+We first found that there was no clear relationship between light intensity and dry mass. This was somewhat surprising since I expected the light factor to have a strong relationship with plant growth. There was only a weak correlation between the light intensity and plant mass. Next, we looked at how light affected germination. We saw that there was a significant correlation between light factor and germination. This makes sense because light is required for plant growth, so you would expect too little light to result in no germination,  but too high of a light factor would kill off the plant as well.  Finally, we can see that there is a clear difference in the number of germinated plants with different soil moistures.  This makes sense since soil is required for plant growth, but some species of plants also can't grow in conditions where they are over saturated with water. 
+
+# Challenges 
+One challenge that I faced was figuring out which statistical tests to do and how to get the data into the correct forms to do the test. For example, originally did several tests for each species separately before I realized that I could put all of my data into one singular test. In the future, I will make sure I find the best method for analyzing my data before jumping in and trying to make several repetitive plots. 
+
+Also, I had a lot of trial and error when trying to remember code. I had to look through old assignments in order to remember how to set up different graphs and save data in the correct formats and was able to use stack overflow to help me understand how I could make my plots more efficent. 
+
