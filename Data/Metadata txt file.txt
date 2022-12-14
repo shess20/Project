@@ -1,0 +1,21 @@
+Sierra Hess
+
+Dry mass Metadata:
+date - date collected ~ written day/month/year
+Species - species of plant 
+factor - light intensity ~ low, med, or high
+table number - table that the plant was on 
+pot number - pot that the plant was in ~ pot numbers repeated for different tables
+mass - mass of the plant 
+
+Germination metadata:
+calendar_date - date collected ~ written day/month/year
+pot_ID - number of each pot 
+species - species of plant
+census - location of plant
+table_ID - number of the table pot was on 
+lightbulb strength - numerical strength value of light intensity
+factor - light intensity ~ low, med, or high
+number_planted - number of plants per pot 
+number_germinated - number of plants that were germinated per pot
+soil_moisture - ammount of moisture in soil in each pot. 

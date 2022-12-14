@@ -19,15 +19,14 @@ I predict that there will be a positive relationship between soil moisture  and 
 
 # Analysis 
 
-Set things up
-```{r}
+```{r setup, include=FALSE}
 rm(list = ls())
 library(tidyverse)
 library(here)
 library(ggfortify)
 ```
-Now let's pull in the data:
-```{r}
+
+```{r, echo=FALSE}
 dry_mass <- read.csv(here("Data", "dry_mass_metadata.csv"),stringsAsFactors = TRUE)
 germination <- read.csv(here("Data", "germination_data.csv"),stringsAsFactors = TRUE)
 ```
